@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ProjectA4SwiftApp: App {
+    
+    @StateObject private var showDataManager = ShowDataManager(show: [])
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(showDataManager)
         }
     }
 }

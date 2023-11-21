@@ -8,17 +8,45 @@
 import SwiftUI
 
 struct ContentView: View {
+    let musicShow = [Show]()
+
+    @State private var showDetails = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                Text("All music show")
+                    .font(.largeTitle)
+                    .padding()
+
+                List(musicShow) { musicBand in
+                    NavigationLink(destination: Text("Details for \(musicBand.name)")) {
+                        Text(musicBand.name)
+                    }
+                }
+                .listStyle(InsetGroupedListStyle())
+                
+                Spacer()
+
+                Button("Add new show") {
+                    showDetails.toggle()
+                }
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(10)
+                .sheet(isPresented: $showDetails) {
+                    NewConcertScreen(show: <#Binding<[Show]>#>)
+                }
+                .padding()
+            }
+            .navigationTitle("Music Bands")
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

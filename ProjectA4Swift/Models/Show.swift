@@ -14,11 +14,13 @@ class Show: Identifiable, ObservableObject {
     @Published var urlString: String
     @Published var concertDate: Date
     @Published var color: Color
-    
-    init(name: String, urlString: String, concertDate: Date, color: Color) {
+    @Published var bandBio: String
+
+    init(name: String, urlString: String, concertDate: Date, color: Color, bandBio: String) {
         self.name = name
         self.urlString = urlString
         self.concertDate = concertDate
         self.color = color
+        self.bandBio = bandBio
     }
 }

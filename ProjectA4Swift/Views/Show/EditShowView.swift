@@ -78,7 +78,7 @@ struct EditShowView: View {
 struct EditShowView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleShows: [Show] = [
-            Show(name: "Show name", urlString: "", concertDate: Date(), color: .blue),
+            Show(name: "Show name", urlString: "", concertDate: Date(), color: .blue, bandBio: ""),
         ]
         
         EditShowView(show: .constant(sampleShows[0]))

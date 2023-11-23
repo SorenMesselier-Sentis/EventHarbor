@@ -18,5 +18,5 @@ struct NameUpdate: View {
 }
 
 #Preview {
-    NameUpdate(musicBand: Show(name: "ecedce", urlString: "ever", concertDate: .now, color: .red))
+    NameUpdate(musicBand: Show(name: "ecedce", urlString: "ever", concertDate: .now, color: .red, bandBio: ""))
 }

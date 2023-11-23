@@ -17,29 +17,36 @@ struct ShowDetailsView: View {
     @EnvironmentObject var ShowDataManager: ShowDataManager
     
     var body: some View {
-        VStack {
-            VStack(spacing: 16) {
-                AsyncImage(url: URL(string: show.urlString)) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView("Loading...")
-                            .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                            .frame(height: 150)
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 150)
-                    case .failure:
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.red)
-                            .frame(height: 150)
-                    @unknown default:
-                        EmptyView()
-                    }
+        VStack(spacing: 16) {
+            AsyncImage(url: URL(string: show.urlString)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .imageScale(.large)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .cornerRadius(15)
+                        .shadow(radius: 5)
+                case .failure:
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                        .imageScale(.large)
+                        .cornerRadius(15)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(show.color, lineWidth: 2)
+                        )
+                        .shadow(radius: 5)
+                @unknown default:
+                    EmptyView()
                 }
-                .padding()
+            }
+            .padding()
 
+            VStack(alignment: .leading, spacing: 8) {
                 Text(show.name)
                     .font(.title)
                     .foregroundColor(.primary)
@@ -47,12 +54,30 @@ struct ShowDetailsView: View {
                 Text("Date: \(formattedDate)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+
+                Text("Bio:")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .padding(.trailing, 4)
+
+                ScrollView {
+                    Text(show.bandBio)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
+                .frame(maxHeight: .infinity)
             }
             .padding()
-            .background(RoundedRectangle(cornerRadius: 15).fill(Color.white).shadow(color: show.color, radius: 10))
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.white)
+                    .shadow(color: show.color, radius: 10)
+            )
             .padding(EdgeInsets(top: 50, leading: 20, bottom: 20, trailing: 20))
             .navigationBarTitle("\(show.name)'s Show", displayMode: .inline)
-            
+
             HStack(spacing: 20) {
                 NavigationLink(
                     destination: EditShowView(show: $show),
@@ -81,7 +106,7 @@ struct ShowDetailsView: View {
                 .alert(isPresented: $showingAlert) {
                     Alert(
                         title: Text("Delete \(show.name)?"),
-                        message: Text("Are you sure you want to delete this show ?"),
+                        message: Text("Are you sure you want to delete this show?"),
                         primaryButton: .destructive(Text("Delete")) {
                             ShowDataManager.deleteShow(id: self.show.id)
                         },
@@ -91,9 +116,6 @@ struct ShowDetailsView: View {
             }
             .padding()
         }
-        .padding()
-        .background(Color.background)
-        .ignoresSafeArea(edges: .bottom)
     }
 
     private var formattedDate: String {
@@ -103,17 +125,13 @@ struct ShowDetailsView: View {
     }
 }
 
-extension Color {
-    static let background = Color("Background")
-}
-
 struct ShowDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        
         let sampleShows: [Show] = [
-            Show(name: "Show name", urlString: "", concertDate: Date(), color: .blue),
+            Show(name: "Show name", urlString: "", concertDate: Date(), color: .blue, bandBio: "This is a sample bio."),
         ]
-        
+
         return ShowDetailsView(show: sampleShows[0], shows: .constant(sampleShows))
+            .environmentObject(ShowDataManager(show: sampleShows))
     }
 }

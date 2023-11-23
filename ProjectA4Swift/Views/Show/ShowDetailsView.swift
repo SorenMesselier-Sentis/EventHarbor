@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ShowDetailsView: View {
-    var show: Show
+    @State var show: Show
     @Binding var shows: [Show]
     
     @State private var showingAlert = false
+    @State private var isEditShowViewPresented = false
     
     @EnvironmentObject var ShowDataManager: ShowDataManager
     
@@ -53,14 +54,19 @@ struct ShowDetailsView: View {
             .navigationBarTitle("\(show.name)'s Show", displayMode: .inline)
             
             HStack(spacing: 20) {
-                Button {
-                    // modify logic
-                } label: {
-                    Text("Modify")
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                NavigationLink(
+                    destination: EditShowView(show: $show),
+                    isActive: $isEditShowViewPresented
+                ) {
+                    Button {
+                        isEditShowViewPresented = true
+                    } label: {
+                        Text("Modify")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
                 }
                 
                 Button {

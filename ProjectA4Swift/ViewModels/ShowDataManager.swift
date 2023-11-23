@@ -6,24 +6,33 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ShowDataManager: ObservableObject {
-    @Published var show: [Show]
+    @Published var shows: [Show]
     
     init(show: [Show]) {
-        self.show = show
+        self.shows = show
     }
     
-    public func addNewShow() {
-        let newShow = Show(name: "", urlString: "", concertDate: Date(), color: .blue)
-        show.append(newShow)
+    public func addNewShow(name: String, urlString: String, concertDate: Date, color: Color) {
+        let newShow = Show(name: name, urlString: urlString, concertDate: concertDate, color: color)
+        shows.append(newShow)
+    }
+    
+    public func editShow(id: UUID, name: String, urlString: String, concertDate: Date, color: Color) {
+        if let index = shows.firstIndex(where: { $0.id == id }) {
+            shows[index].name = name
+            shows[index].urlString = urlString
+            shows[index].concertDate = concertDate
+            shows[index].color = color
+        }
     }
     
     public func deleteShow(id: UUID) {
-        if let index = show.firstIndex(where: { $0.id == id }) {
-            show.remove(at: index)
+        if let index = shows.firstIndex(where: { $0.id == id }) {
+            shows.remove(at: index)
         }
     }
     
 }
- 

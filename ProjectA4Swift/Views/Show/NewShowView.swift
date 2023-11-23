@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewShowView: View {
     
-    @Binding var show: [Show]
+    @Binding var shows: [Show]
     @Binding var newShow: Bool
     
     @State var urlString: String = ""
@@ -56,7 +56,7 @@ struct NewShowView: View {
             
             ColorPicker("Select the background color", selection: $bgColor)
             Button {
-                ShowDataManager.addNewShow()
+                ShowDataManager.addNewShow(name: name, urlString: urlString, concertDate: concertDate, color: bgColor)
                 newShow.toggle()
             } label: {
                 Text("Add a new Show")
@@ -68,14 +68,14 @@ struct NewShowView: View {
             Spacer()
         }
         .padding()
-        .navigationBarTitle("New Concert", displayMode: .inline)
+        .navigationBarTitle("New Show", displayMode: .inline)
     }
 }
 
 struct NewConcertScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NewShowView(show: .constant([]), newShow: .constant(false))
+            NewShowView(shows: .constant([]), newShow: .constant(false))
         }
     }
 }

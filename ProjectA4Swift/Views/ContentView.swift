@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var musicShow = [Show]()
     @State private var showDetails = false
     @State private var newShow = false
     @State private var searchText = ""
+    
+    @EnvironmentObject var ShowDataManager: ShowDataManager
 
     var body: some View {
         NavigationView {
@@ -24,10 +25,9 @@ struct ContentView: View {
                 SearchBar(text: $searchText)
 
                 List {
-                    ForEach(musicShow.filter { searchText.isEmpty || $0.name.localizedCaseInsensitiveContains(searchText) }) { musicBand in
-                        NavigationLink(destination: ShowDetailsView(show: musicBand, shows: $musicShow)) {
-                            Text(musicBand.name)
-                                .foregroundColor(.black)
+                    ForEach(ShowDataManager.shows.filter { searchText.isEmpty || $0.name.localizedCaseInsensitiveContains(searchText) }) { musicBand in
+                        NavigationLink(destination: ShowDetailsView(show: musicBand, shows: $ShowDataManager.shows)) {
+                            NameUpdate(musicBand: musicBand)
                         }
                     }
                 }
@@ -43,7 +43,7 @@ struct ContentView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .sheet(isPresented: $newShow) {
-                    NewShowView(show: $musicShow, newShow: $newShow)
+                    NewShowView(shows: $ShowDataManager.shows, newShow: $newShow)
                 }
                 .padding()
             }

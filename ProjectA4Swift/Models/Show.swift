@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class Show: Identifiable, ObservableObject {
-    let id: UUID = UUID()
+    @Published var id: UUID = UUID()
     @Published var name: String
     @Published var urlString: String
     @Published var concertDate: Date
